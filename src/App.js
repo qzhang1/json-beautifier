@@ -63,6 +63,16 @@ class App extends React.Component {
     this.setState({ isModalOpen: false });
   };
 
+  generateJsonTree(jsonText){
+    return (
+      <div className="json-container border rounded">
+        <p className="keep-text-left">{"{ "}<i className="fa fa-minus-square collapsible-icon" onClick={this.collapse}></i></p>
+        <RecursiveCollapse json={jsonText} />
+        <p className="keep-text-left">{"}"}</p>
+      </div>
+    );
+  }
+
   render() {
 
     return (      
@@ -91,7 +101,10 @@ class App extends React.Component {
               <JsonTextArea isReadonly={true} prettifyOutput={this.state.currentJson} />
             </div>
             <div className="column">
-              <RecursiveCollapse json={this.state.currentJson} />
+              <div className="json-container border rounded">
+                {this.state.currentJson != null && this.state.currentJson.length > 0 ? this.generateJsonTree(this.state.currentJson) : null}
+              </div>
+              
             </div>
           </div>
         </div>                         

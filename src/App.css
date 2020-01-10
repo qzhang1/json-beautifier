@@ -6,3 +6,7 @@ textarea {
     resize: none !important;
     overflow-y:auto;
 }
+
+.json-container {
+    display: block;
+}

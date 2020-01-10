@@ -1,5 +1,6 @@
 import React from 'react';
 import JsonTextArea from './components/JsonTextArea';
+import RecursiveCollapse from './components/RecursiveCollapse';
 import './App.css';
 import {Modal} from 'semantic-ui-react';
 
@@ -66,17 +67,19 @@ class App extends React.Component {
 
     return (      
       <div className="ui container main">   
-      <Modal
-      header="Message" 
-      open={this.state.isModalOpen}
-      content={this.state.modalMessage}
-      onClose={this.closeModal}
-      actions={[{key:'close', content: 'Close', onClick: this.closeModal}]} />
+        <Modal
+        header="Message" 
+        open={this.state.isModalOpen}
+        content={this.state.modalMessage}
+        onClose={this.closeModal}
+        actions={[{key:'close', content: 'Close', onClick: this.closeModal}]} />
+
         <h2 className="ui icon center aligned header">
           <i className="beer circular icon"></i>
           <div className="content">Json Beautifier</div>          
         </h2>
-        <div className="ui stackable center aligned three column grid">            
+
+        <div className="ui stackable center aligned four column grid">            
           <div className="row">
             <div className="column">
               <JsonTextArea onChangeHandler={this.handleChange} textAreaPlaceHolder="Insert JSON here..." isReadonly={false}/>
@@ -86,6 +89,9 @@ class App extends React.Component {
             </div>
             <div className="column">
               <JsonTextArea isReadonly={true} prettifyOutput={this.state.currentJson} />
+            </div>
+            <div className="column">
+              <RecursiveCollapse json={this.state.currentJson} />
             </div>
           </div>
         </div>                         

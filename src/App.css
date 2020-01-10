@@ -10,3 +10,23 @@ textarea {
 .json-container {
     display: block;
 }
+
+.json-container .indent {
+    padding-left: 15px;
+}
+
+.indent .json-property {
+    margin: 0px;
+}
+
+.indent .array-value {
+    margin: 0px;
+}
+
+.keep-text-left {
+    text-align: left;
+}
+
+.collapsible-icon {
+    cursor: pointer;
+}

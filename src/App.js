@@ -89,7 +89,7 @@ class App extends React.Component {
           <div className="content">Json Beautifier</div>          
         </h2>
 
-        <div className="ui stackable center aligned four column grid">            
+        <div className="ui stackable center aligned three column grid">            
           <div className="row">
             <div className="column">
               <JsonTextArea onChangeHandler={this.handleChange} textAreaPlaceHolder="Insert JSON here..." isReadonly={false}/>
@@ -97,9 +97,9 @@ class App extends React.Component {
             <div className="middle aligned column">
               <button className="ui big blue button" onClick={this.handleClick}>Beautify</button>
             </div>
-            <div className="column">
+            {/* <div className="column">
               <JsonTextArea isReadonly={true} prettifyOutput={this.state.currentJson} />
-            </div>
+            </div> */}
             <div className="column">
               <div className="json-container border rounded">
                 {this.state.currentJson != null && this.state.currentJson.length > 0 ? this.generateJsonTree(this.state.currentJson) : null}

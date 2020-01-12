@@ -12,7 +12,8 @@ class App extends React.Component {
       currentJson: null,      
       previousJson: [],
       isModalOpen: false,
-      modalMessage: ''            
+      modalMessage: '',
+      isOutermostCollapse: false            
     };
 
     this.handleChange.bind(this);
@@ -61,16 +62,37 @@ class App extends React.Component {
 
   closeModal = e => {
     this.setState({ isModalOpen: false });
+  };  
+
+  collapse = e => {
+    this.setState({
+      isOutermostCollapse: !this.state.isOutermostCollapse
+    });
   };
 
   generateJsonTree(jsonText){
-    return (
-      <div className="json-container border rounded">
-        <p className="keep-text-left">{"{ "}<i className="fa fa-minus-square collapsible-icon" onClick={this.collapse}></i></p>
-        <RecursiveCollapse json={jsonText} />
-        <p className="keep-text-left">{"}"}</p>
-      </div>
-    );
+    if(jsonText == null){      
+      return (      
+        <div className="json-tree-container">
+        </div>      
+      );
+    }
+
+    if (this.state.isOutermostCollapse){
+      return (      
+        <div className="json-tree-container">
+          <p className="keep-text-left">{"{ "}<i className="fa fa-plus square collapsible-icon" onClick={this.collapse}></i>{" }"}</p>
+        </div>      
+      );
+    }
+    else {
+      return (         
+        <div className="json-tree-container json-container">
+          <RecursiveCollapse json={JSON.parse(jsonText)} />
+        </div>                     
+      );
+    }
+    
   }
 
   render() {
@@ -100,11 +122,8 @@ class App extends React.Component {
             {/* <div className="column">
               <JsonTextArea isReadonly={true} prettifyOutput={this.state.currentJson} />
             </div> */}
-            <div className="column">
-              <div className="json-container border rounded">
-                {this.state.currentJson != null && this.state.currentJson.length > 0 ? this.generateJsonTree(this.state.currentJson) : null}
-              </div>
-              
+            <div className="column">              
+                {this.generateJsonTree(this.state.currentJson)}
             </div>
           </div>
         </div>                         

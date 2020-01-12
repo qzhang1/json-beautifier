@@ -10,32 +10,53 @@ class RecursiveCollapse extends Component {
         this.collapse = this.collapse.bind(this);
     }    
 
-    generateRecursiveCollapse(json){  
-        let jsonObj = JSON.parse(json);
+    generateRecursiveCollapse(jsonObj){  
         let jsonIsArray = Array.isArray(jsonObj);
         let keys = Object.keys(jsonObj);
-        let blocks = [];                
+        let wrapperBlocks = [];
+        let blocks = [];                      
 
-        for (let i = 0; i < keys.length; i++) {
-            if (typeof jsonObj[keys[i]] === "object") {                
-                blocks.push(<p className="json-property keep-text-left">{`"${keys[i]}": ${Array.isArray(jsonObj[keys[i]]) ? "[" : "{"} `}<i className="fa fa-minus-square collapsible-icon" onClick={this.collapse}></i></p>);
-                blocks.push(<RecursiveCollapse json={JSON.stringify(jsonObj[keys[i]])} />);
-                //blocks.push(this.generateRecursiveCollapse(JSON.stringify(jsonObj[keys[i]])));
-                blocks.push(<p className="json-property keep-text-left">{`${Array.isArray(jsonObj[keys[i]]) ? "]" : "}"}`}</p>);
-            }
+        if (jsonIsArray) {
+            wrapperBlocks.push(<p className="json-property keep-text-left">{"[ "}<i className={this.state.isCollapsed ? "fa fa-plus-square collapsible-icon" : "fa fa-minus-square collapsible-icon"} onClick={this.collapse}></i></p>);        
+        } 
+        else if (typeof jsonObj === "object") {
+            wrapperBlocks.push(<p className="json-property keep-text-left">{"{ "}<i className={this.state.isCollapsed ? "fa fa-plus-square collapsible-icon" : "fa fa-minus-square collapsible-icon"} onClick={this.collapse}></i></p>);        
+        }
+
+        // beginning bracket/brace        
+        for (let i = 0; i < keys.length; i++) {             
+            let currObj = jsonObj[keys[i]];
+            
+            // object or array type
+            if (typeof currObj === "object") {
+                blocks.push((
+                    <span>
+                        {`${keys[i]}: `}<RecursiveCollapse collapse={this.state.isCollapsed} json={currObj} />
+                    </span>                    
+                ));
+            }            
+            // array items
             else if (jsonIsArray) {
-                let isLastProperty = i === (keys.length - 1);
-                blocks.push(<p className="json-property keep-text-left">{`${keys[i]}${isLastProperty ? "" : ","}`}</p>);
+                let isLastProperty = i === (keys.length - 1);                
+                blocks.push(<p className="json-property keep-text-left">{`${keys[i]}${isLastProperty ? "" : ","}`}</p>);                
             }
+            // every other type: Number, String, Undefined, Null, Boolean, and Symbol
             else {
                 let isLastProperty = i === (keys.length - 1);
-                blocks.push(<p className="json-property keep-text-left">{`"${keys[i]}": ${jsonObj[keys[i]]}${isLastProperty? "" : ","}`}</p>);
+                blocks.push(<p className="json-property keep-text-left">{`"${keys[i]}": ${currObj}${isLastProperty? "" : ","}`}</p>);
             }
         }  
 
-        return (
+        wrapperBlocks.push((
             <div className="indent">
                 {blocks.map(ele => ele)}
+            </div>
+        ));
+        wrapperBlocks.push(<p className="json-property keep-text-left">{jsonIsArray ? "]":"}"}</p>);        
+
+        return (            
+            <div>
+                {wrapperBlocks.map(wb => wb)}
             </div>
         );
     }
@@ -48,20 +69,21 @@ class RecursiveCollapse extends Component {
     }
     
 
-    render() {
+    render() {        
         let result = <div></div>;
-        if (this.props.json && this.props.json.length > 0){      
+        let isArray = Array.isArray(this.props.json);
+        if (this.props.json && this.props.json != null){      
             if(this.state.isCollapsed){
                 result = (
                     <div className="indent keep-text-left">
-                        <span className="json-property keep-text-left">{"{ "}<i className="fa fa-plus-square collapsible-icon" onClick={this.collapse}></i>{" }"}</span>
+                        {isArray ? "[ " : "{ "}<i onClick={this.collapse} className={this.state.isCollapsed ? "fa fa-plus-square collapsible-icon" : "fa fa-minus-square collapsible-icon"} ></i>{isArray ? " ]" : " }"}
                     </div>
                 );
             }
-            else {
+            else {                
                 result = (
-                    <div className="indent keep-text-left">                        
-                        {this.generateRecursiveCollapse(this.props.json)}                        
+                    <div className="indent keep-text-left" >
+                        {this.generateRecursiveCollapse(this.props.json)}                                    
                     </div>
                 );
             }            

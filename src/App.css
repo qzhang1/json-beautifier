@@ -25,6 +25,7 @@ textarea {
 
 .keep-text-left {
     text-align: left;
+    padding-left: 2%;
 }
 
 .collapsible-icon {
@@ -44,4 +45,6 @@ textarea {
     padding-top: 7px;
     font-size: 1em;
     font-family: sans-serif;
+    overflow-y: auto;
 }
+

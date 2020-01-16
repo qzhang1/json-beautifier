@@ -117,11 +117,12 @@ class App extends React.Component {
               <JsonTextArea onChangeHandler={this.handleChange} textAreaPlaceHolder="Insert JSON here..." isReadonly={false}/>
             </div>
             <div className="middle aligned column">
-              <button className="ui big blue button" onClick={this.handleClick}>Beautify</button>
-            </div>
-            {/* <div className="column">
-              <JsonTextArea isReadonly={true} prettifyOutput={this.state.currentJson} />
-            </div> */}
+              <div className="ui basic vertical buttons">
+                <button className="ui basic big blue button" onClick={this.handleClick}>Beautify</button>
+                {/* <button className="ui basic big black button">Go Dark</button>
+                <button className="ui basic big green button">Download</button> */}
+              </div>                            
+            </div>           
             <div className="column">              
                 {this.generateJsonTree(this.state.currentJson)}
             </div>

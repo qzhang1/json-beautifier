@@ -42,5 +42,19 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>      
+        function copy(){          
+            let jsonText = document.querySelector("#json-input").textContent;
+            if (jsonText && jsonText.length > 0){
+              let jsonBeauty = JSON.stringify(JSON.parse(jsonText));
+              let dummy = document.createElement("textarea");
+              document.body.appendChild(dummy);
+              dummy.value = jsonBeauty;
+              dummy.select();
+              document.execCommand("copy");
+              document.body.removeChild(dummy);          
+            }
+          }
+    </script>    
   </body>
 </html>

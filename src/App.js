@@ -3,6 +3,7 @@ import JsonTextArea from './components/JsonTextArea';
 import RecursiveCollapse from './components/RecursiveCollapse';
 import './App.css';
 import {Modal} from 'semantic-ui-react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 class App extends React.Component {
   constructor(props){
@@ -13,7 +14,8 @@ class App extends React.Component {
       previousJson: [],
       isModalOpen: false,
       modalMessage: '',
-      isOutermostCollapse: false            
+      isOutermostCollapse: false,
+      isCopied: false          
     };
 
     this.handleChange.bind(this);
@@ -88,12 +90,12 @@ class App extends React.Component {
     else {
       return (         
         <div className="json-tree-container json-container">
-          <RecursiveCollapse json={JSON.parse(jsonText)} />
+          <RecursiveCollapse isLast={true} json={JSON.parse(jsonText)} />
         </div>                     
       );
     }
     
-  }
+  };
 
   render() {
 
@@ -111,6 +113,7 @@ class App extends React.Component {
           <div className="content">Json Beautifier</div>          
         </h2>
 
+        {this.state.isCopied ? (<div className="ui floating message">{"Copied!"}</div>) : null}                
         <div className="ui stackable center aligned three column grid">            
           <div className="row">
             <div className="column">
@@ -119,8 +122,10 @@ class App extends React.Component {
             <div className="middle aligned column">
               <div className="ui basic vertical buttons">
                 <button className="ui basic big blue button" onClick={this.handleClick}>Beautify</button>
-                {/* <button className="ui basic big black button">Go Dark</button>
-                <button className="ui basic big green button">Download</button> */}
+                <button className="ui basic big black button">Go Dark</button>
+                <CopyToClipboard text={this.state.currentJson} onCopy={() => this.setState({ isCopied: true})}>
+                  { document.queryCommandSupported('copy') && <button className="ui basic big green button copy-button" onClick="copy()">Copy</button>}
+                </CopyToClipboard>                
               </div>                            
             </div>           
             <div className="column">              

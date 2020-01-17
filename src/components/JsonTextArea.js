@@ -36,7 +36,7 @@ class JsonTextArea extends React.Component
 
         return (
             <Form>
-                <TextArea 
+                <TextArea id="json-input"
                 {...textAreaProps}
                  />
             </Form>

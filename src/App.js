@@ -4,6 +4,8 @@ import RecursiveCollapse from './components/RecursiveCollapse';
 import './App.css';
 import {Modal} from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends React.Component {
   constructor(props){
@@ -97,6 +99,10 @@ class App extends React.Component {
     
   };
 
+  handleCopy = () => {
+    toast.success("Copied!");    
+  };
+
   render() {
 
     return (      
@@ -112,18 +118,18 @@ class App extends React.Component {
           <i className="beer circular icon"></i>
           <div className="content">Json Beautifier</div>          
         </h2>
-
-        {this.state.isCopied ? (<div className="ui floating message">{"Copied!"}</div>) : null}                
+        
         <div className="ui stackable center aligned three column grid">            
           <div className="row">
             <div className="column">
               <JsonTextArea onChangeHandler={this.handleChange} textAreaPlaceHolder="Insert JSON here..." isReadonly={false}/>
             </div>
             <div className="middle aligned column">
-              <div className="ui basic vertical buttons">
+              <ToastContainer/>
+              <div className="ui basic vertical buttons">              
                 <button className="ui basic big blue button" onClick={this.handleClick}>Beautify</button>
-                <button className="ui basic big black button">Go Dark</button>
-                <CopyToClipboard text={this.state.currentJson} onCopy={() => this.setState({ isCopied: true})}>
+                {/* <button className="ui basic big black button">Go Dark</button> */}
+                <CopyToClipboard text={this.state.currentJson} onCopy={this.handleCopy}>
                   { document.queryCommandSupported('copy') && <button className="ui basic big green button copy-button" onClick="copy()">Copy</button>}
                 </CopyToClipboard>                
               </div>                            

@@ -1,3 +1,7 @@
+# json-beautifier
+This project was motivated by the lack of client-side only json beautifiers and my coworkers for bullying me into making one of my own : )
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

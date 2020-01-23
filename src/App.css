@@ -50,5 +50,9 @@ textarea {
     font-size: 1em;
     font-family: sans-serif;
     overflow-y: auto;
+    max-height: 534px;
 }
 
+.main {
+    width: 75% !important;
+}

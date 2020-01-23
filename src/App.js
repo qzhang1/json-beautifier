@@ -121,10 +121,10 @@ class App extends React.Component {
         
         <div className="ui stackable center aligned three column grid">            
           <div className="row">
-            <div className="column">
+            <div className="six wide column">
               <JsonTextArea onChangeHandler={this.handleChange} textAreaPlaceHolder="Insert JSON here..." isReadonly={false}/>
             </div>
-            <div className="middle aligned column">
+            <div className="four wide middle aligned column">
               <ToastContainer/>
               <div className="ui basic vertical buttons">              
                 <button className="ui basic big blue button" onClick={this.handleClick}>Beautify</button>
@@ -134,7 +134,7 @@ class App extends React.Component {
                 </CopyToClipboard>                
               </div>                            
             </div>           
-            <div className="column">              
+            <div className="six wide column">              
                 {this.generateJsonTree(this.state.currentJson)}
             </div>
           </div>

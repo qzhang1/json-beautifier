@@ -1,6 +1,6 @@
 {
-  "name": "json_beautifier",
   "homepage": "http://qzhang1.github.io/json-beautifier/",
+  "name": "json_beautifier",
   "version": "0.1.0",
   "engines": {
     "npm": "6.12.1",

@@ -143,7 +143,7 @@ const App = () => {
                     <LoadingButton
                       onClick={handleClick}
                       loading={isLoading}
-                      btnText={"Beautifytific"}
+                      btnText={"Beautify"}
                       color={"primary"}
                     />
                     <Button

@@ -1,147 +1,175 @@
-import React from 'react';
-import JsonTextArea from './components/JsonTextArea';
-import RecursiveCollapse from './components/RecursiveCollapse';
-import './App.css';
-import {Modal} from 'semantic-ui-react';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// 3rd party
+import React, { useState } from "react";
+import {
+  makeStyles,
+  createMuiTheme,
+  ThemeProvider,
+} from "@material-ui/core/styles";
+import {
+  CssBaseline,
+  Grid,
+  Container,
+  TextField,
+  Button,
+  ButtonGroup,
+} from "@material-ui/core";
+import {
+  orange,
+  lightBlue,
+  deepPurple,
+  deepOrange,
+} from "@material-ui/core/colors";
+import ReactJson from "react-json-view";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import EmojiFoodBeverageOutlinedIcon from "@material-ui/icons/EmojiFoodBeverageOutlined";
 
-class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      currentInput: '',
-      currentJson: null,      
-      previousJson: [],
-      isModalOpen: false,
-      modalMessage: '',
-      isOutermostCollapse: false,
-      isCopied: false          
-    };
+// custom components
+import "./App.css";
+import LoadingButton from "./LoadingButton";
 
-    this.handleChange.bind(this);
-  }
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    minHeight: "100%",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+}));
 
-  handleChange = event => {
-   let currentInput = event.target.value;
-   this.setState({
-     currentInput: currentInput
-   });   
-  };
-  
-  handleClick = event => {
-    let currentInput = this.state.currentInput;    
-    if (currentInput && currentInput.length > 0){
-      let attemptedParse = '';    
-      let errMsg = '';
-      try 
-      {
+const App = () => {
+  const classes = useStyles();
+  const [currentInput, setCurrentInput] = useState("");
+  const [currentJson, setCurrentJson] = useState();
+  const [darkMode, setDarkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: darkMode ? "dark" : "light",
+      primary: {
+        main: darkMode ? orange[500] : lightBlue[500],
+      },
+      secondary: {
+        main: darkMode ? deepOrange[900] : deepPurple[500],
+      },
+    },
+  });
+  const handleClick = (e) => {
+    if (currentInput && currentInput.length > 0) {
+      setIsLoading(true);
+      let attemptedParse = "";
+      let errMsg = "";
+      try {
         attemptedParse = JSON.parse(currentInput);
-        attemptedParse = JSON.stringify(attemptedParse, null, 4);
-      }
-      catch(err)
-      {
+      } catch (err) {
         errMsg = `Failed due to ${err.name}\nError: ${err.message}`;
       }
-        
-      if (errMsg.length > 0){
-        this.setState({
-          isModalOpen: true,
-          modalMessage: errMsg
-        });
+
+      if (errMsg.length > 0) {
+        toast.error(errMsg);
+      } else {
+        setCurrentJson(attemptedParse);
       }
-      else
-      {        
-        console.log(attemptedParse);
-        this.setState({
-          currentJson: attemptedParse,
-          previousJson: [...this.state.previousJson, attemptedParse],
-          isModalOpen: false,
-          modalMessage: ''
-        });
-      }
-     }   
+    } else {
+      toast.warn("Please enter ugly JSON first...");
+    }
+    setIsLoading(false);
   };
-
-  closeModal = e => {
-    this.setState({ isModalOpen: false });
-  };  
-
-  collapse = e => {
-    this.setState({
-      isOutermostCollapse: !this.state.isOutermostCollapse
-    });
-  };
-
-  generateJsonTree(jsonText){
-    if(jsonText == null){      
-      return (      
+  const generateJsonTree = () => {
+    if (currentJson == null) {
+      return <div className="json-tree-container"></div>;
+    } else {
+      return (
         <div className="json-tree-container">
-        </div>      
+          <ReactJson
+            src={currentJson}
+            theme={darkMode ? "monokai" : "rjv-default"}
+            style={{ overflow: "auto", maxHeight: "955px" }}
+          />
+        </div>
       );
     }
-
-    if (this.state.isOutermostCollapse){
-      return (      
-        <div className="json-tree-container">
-          <p className="keep-text-left">{"{ "}<i className="fa fa-plus square collapsible-icon" onClick={this.collapse}></i>{" }"}</p>
-        </div>      
-      );
-    }
-    else {
-      return (         
-        <div className="json-tree-container json-container">
-          <RecursiveCollapse isLast={true} json={JSON.parse(jsonText)} />
-        </div>                     
-      );
-    }
-    
   };
 
-  handleCopy = () => {
-    toast.success("Copied!");    
-  };
-
-  render() {
-
-    return (      
-      <div className="ui container main">   
-        <Modal
-        header="Message" 
-        open={this.state.isModalOpen}
-        content={this.state.modalMessage}
-        onClose={this.closeModal}
-        actions={[{key:'close', content: 'Close', onClick: this.closeModal}]} />
-
-        <h2 className="ui icon center aligned header">
-          <i className="beer circular icon"></i>
-          <div className="content">Json Beautifier</div>          
-        </h2>
-        
-        <div className="ui stackable center aligned three column grid">            
-          <div className="row">
-            <div className="six wide column">
-              <JsonTextArea onChangeHandler={this.handleChange} textAreaPlaceHolder="Insert JSON here..." isReadonly={false}/>
-            </div>
-            <div className="four wide middle aligned column">
-              <ToastContainer/>
-              <div className="ui basic vertical buttons">              
-                <button className="ui basic big blue button" onClick={this.handleClick}>Beautify</button>
-                {/* <button className="ui basic big black button">Go Dark</button> */}
-                <CopyToClipboard text={this.state.currentJson} onCopy={this.handleCopy}>
-                  { document.queryCommandSupported('copy') && <button className="ui basic big green button copy-button" onClick="copy()">Copy</button>}
-                </CopyToClipboard>                
-              </div>                            
-            </div>           
-            <div className="six wide column">              
-                {this.generateJsonTree(this.state.currentJson)}
-            </div>
-          </div>
-        </div>                         
-      </div>      
-    );
-  }
-}
+  return (
+    <div className={classes.root}>
+      <main>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Container maxWidth="xl">
+            <Grid
+              container
+              spacing={0}
+              justify="center"
+              alignItems="center"
+              direction="column"
+            >
+              <Grid item md={12}>
+                <EmojiFoodBeverageOutlinedIcon style={{ fontSize: 80 }} />
+              </Grid>
+              <Grid item md={12}>
+                <h2>Json Beautifier</h2>
+              </Grid>
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item md={5} lg={5}>
+                <TextField
+                  id="current-input"
+                  label="Ugly JSON goes here..."
+                  multiline
+                  rows={50}
+                  fullWidth
+                  variant="outlined"
+                  onChange={(e) => setCurrentInput(e.target.value)}
+                />
+              </Grid>
+              <Grid item md={2} lg={2}>
+                <Grid
+                  container
+                  spacing={1}
+                  justify="center"
+                  alignItems="center"
+                >
+                  <ButtonGroup
+                    orientation="vertical"
+                    aria-label="vertical outlined primary button group"
+                    variant="contained"
+                  >
+                    {/* <Button color="primary" onClick={handleClick}>
+                      Beautify
+                    </Button> */}
+                    <LoadingButton
+                      onClick={handleClick}
+                      loading={isLoading}
+                      btnText={"Beautifytific"}
+                      color={"primary"}
+                    />
+                    <Button
+                      color="secondary"
+                      onClick={() => setDarkMode(!darkMode)}
+                    >
+                      Dark Mode
+                    </Button>
+                  </ButtonGroup>
+                </Grid>
+              </Grid>
+              <Grid item md={5} lg={5}>
+                {generateJsonTree()}
+              </Grid>
+            </Grid>
+          </Container>
+        </ThemeProvider>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={true}
+        />
+      </main>
+    </div>
+  );
+};
 
 export default App;

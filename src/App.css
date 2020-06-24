@@ -1,58 +1,56 @@
 div.ui.container.main {
-    padding-top: 1em;
+  padding-top: 1em;
 }
 
 .json-property {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 textarea {
-    resize: none !important;
-    overflow-y:auto;
+  resize: none !important;
+  overflow-y: auto;
 }
 
 .json-container {
-    display: block;
+  display: block;
 }
 
 .json-container .indent {
-    padding-left: 15px;
+  padding-left: 15px;
 }
 
 .indent .json-property {
-    margin: 0px;
+  margin: 0px;
 }
 
 .indent .array-value {
-    margin: 0px;
+  margin: 0px;
 }
 
 .keep-text-left {
-    text-align: left;
-    padding-left: 2%;
+  text-align: left;
+  padding-left: 2%;
 }
 
 .collapsible-icon {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.json-tree-container {        
-    margin: 0em;
-    background: #ffffff;
-    border: 1px solid rgba(34,36,38,0.15);
-    outline:none;
-    color: rgba(0,0,0,0.87);
-    box-shadow: 0em 0em 0em 0em transparent inset;    
-    height: 100%;    
-    border-radius: 0.28571429rem;
-    line-height: 1.2857;
-    padding-top: 7px;
-    font-size: 1em;
-    font-family: sans-serif;
-    overflow-y: auto;
-    max-height: 534px;
+.json-tree-container {
+  margin: 0em;
+  border: 1px solid grey;
+  outline: none;
+  box-shadow: 0em 0em 0em 0em transparent inset;
+  height: 100%;
+  width: 100%;
+  border-radius: 0.28571429rem;
+  line-height: 1.2857;
+  padding-top: 7px;
+  font-size: 1em;
+  font-family: sans-serif;
+  overflow-y: auto;
 }
 
 .main {
-    width: 75% !important;
+  width: 75% !important;
 }
